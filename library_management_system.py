@@ -20,15 +20,25 @@ class Library:
         connection.commit()
     def showBooks(self):
         query = "SELECT * FROM books"
-        result = cursor.execute(query)
-        if result == None:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if not result:
             print("there is not any book")
-        for row in result:
-            print(row)
-            
+        else:
+            for row in result:
+                print(row)
+        
+    def search(self , title):
+        query = "SELECT * FROM books WHERE title = ?"
+        cursor.execute(query , (title,))
+        result = cursor.fetchall()
+        if not result:
+            print("not found anything")
+        else:
+            for row in result:
+                print(row)        
+  
 
-
-    
         
 cursor.close()
 connection.close()       
