@@ -14,13 +14,22 @@ class Library:
     def __init__(self):
         pass
     def addBook(self , book):
-        quary = "INSERT INTO books (title , author , year , status) VALUES (? , ? , ? , ?)"
+        query = "INSERT INTO books (title , author , year , status) VALUES (? , ? , ? , ?)"
         parametr = (book.title , book.author , book.year , book.status)
-        cursor.execute(quary , parametr)
+        cursor.execute(query , parametr)
         connection.commit()
+    def showBooks(self):
+        query = "SELECT * FROM books"
+        result = cursor.execute(query)
+        if result == None:
+            print("there is not any book")
+        for row in result:
+            print(row)
+            
 
 
     
         
-        
+cursor.close()
+connection.close()       
 
