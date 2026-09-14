@@ -39,7 +39,25 @@ class Library:
             for row in result:
                 print(row)
     def edit(self):
-        pass
+        title = input("enter the title of the book you want to edit: ")
+        author = input("enter the author of the book you want to edit: ")
+        query = "SELECT * FROM books WHERE title = ? AND author = ?"
+        cursor.execute(query, (title, author))
+        result = cursor.fetchone()
+        if not result:
+            print("there is not this book")
+            return
+
+        new_title = input("enter the new title: ")
+        new_author = input("enter the new author: ")
+        new_year = input("enter the new year: ")
+
+        update_query = "UPDATE books SET title = ?, author = ?, year = ? WHERE title = ? AND author = ?"
+        parameters = (new_title, new_author, new_year, title, author)
+        cursor.execute(update_query, parameters)
+        connection.commit()
+        print("book updated successfully")
+        
     def delete(self , title , author):
         query = "DELETE FROM books WHERE title = ? AND author = ?"
         parametrs = (title , author)
