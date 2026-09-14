@@ -18,6 +18,7 @@ class Library:
         parametr = (book.title , book.author , book.year , book.status)
         cursor.execute(query , parametr)
         connection.commit()
+        print("added")
     def showBooks(self):
         query = "SELECT * FROM books"
         cursor.execute(query)
@@ -49,6 +50,17 @@ class Library:
         else:
             connection.commit()
             print("deleted")
+    def barrow(self , title , author):
+        query = "UPDATE books SET status = ?  WHERE title = ? AND author = ? AND status = ?" 
+        parametrs = (False , title , author , True)
+        cursor.execute(query , parametrs)
+        result = cursor.fetchone()
+        if not result:
+            print("there is not this book")
+        else:
+            connection.commit()
+            print("borrowed")
+        
   
 
     
