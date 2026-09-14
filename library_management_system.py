@@ -18,7 +18,7 @@ class Library:
         parametr = (book.title , book.author , book.year , book.status)
         cursor.execute(query , parametr)
         connection.commit()
-        print("added")
+        print("added successfully")
     def showBooks(self):
         query = "SELECT * FROM books"
         cursor.execute(query)
@@ -109,12 +109,57 @@ class Library:
             book = cursor.fetchone()
 
             if book is None:
-                print("the book not found")
+                print("this book did not exist before")
             else:
                 print("the book is already returned")
         else:
             connection.commit()
             print("the book was successfully returned")
+
+print("welcome to the library management system")
+print("1. add book")
+print("2. edit book")
+print("3. delete book")
+print("4. borrow book")
+print("5. return book")
+print("6. show books")
+print("7. exit")
+
+lib = Library()
+while True:
+    try:
+        choice = int(input("enter your choice: "))
+    except ValueError:
+        print("invalid input. please enter a number.")
+        continue
+    if choice == 1:
+        title = input("enter the title of the book: ")
+        author = input("enter the author of the book: ")
+        year = input("enter the year of the book: ")
+        book = Book(title , author , year)
+        lib.addBook(book)
+    elif choice == 2:
+        lib.edit()
+    elif choice == 3:
+        title = input("enter the title of the book you want to delete: ")
+        author = input("enter the author of the book you want to delete: ")
+        lib.delete(title , author)  
+    elif choice == 4:
+        title = input("enter the title of the book you want to borrow: ")
+        author = input("enter the author of the book you want to borrow: ")
+        lib.barrow(title , author)
+    elif choice == 5:
+        title = input("enter the title of the book you want to return: ")
+        author = input("enter the author of the book you want to return: ")
+        lib.Return(title , author)  
+    elif choice == 6:
+        lib.showBooks()
+    elif choice == 7:
+        print("exiting the program...")
+        break
+    else:
+        print("invalid choice. please try again.")
+
 
 
 cursor.close()
