@@ -36,10 +36,21 @@ class Library:
             print("not found anything")
         else:
             for row in result:
-                print(row)        
+                print(row)
+    def edit(self):
+        pass
+    def delete(self , title , author):
+        query = "DELETE FROM books WHERE title = ? AND author = ?"
+        parametrs = (title , author)
+        cursor.execute(query , parametrs)
+        result = cursor.fetchone()
+        if not result:
+            print("there is not this book")
+        else:
+            connection.commit()
+            print("deleted")
   
 
-        
+    
 cursor.close()
 connection.close()       
-
