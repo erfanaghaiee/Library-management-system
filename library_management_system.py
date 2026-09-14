@@ -5,7 +5,7 @@ connection = sqlite3.connect("books.db")
 cursor = connection.cursor()
 
 class Book:
-    def __init__(self,title , author , year , status = bool):
+    def __init__(self,title , author , year , status = True):
         self.title = title
         self.author = author
         self.year = year
@@ -50,19 +50,54 @@ class Library:
         else:
             connection.commit()
             print("deleted")
-    def barrow(self , title , author):
-        query = "UPDATE books SET status = ?  WHERE title = ? AND author = ? AND status = ?" 
-        parametrs = (False , title , author , True)
-        cursor.execute(query , parametrs)
-        result = cursor.fetchone()
-        if not result:
-            print("there is not this book")
+    def barrow(self, title, author):
+        query = """
+            UPDATE books
+            SET status = ?
+            WHERE title = ? AND author = ? AND status = ?
+        """
+        parameters = (False, title, author, True)
+        cursor.execute(query, parameters)
+
+        if cursor.rowcount == 0:
+            cursor.execute(
+                "SELECT status FROM books WHERE title = ? AND author = ?",
+                (title, author)
+            )
+            book = cursor.fetchone()
+
+            if book is None:
+                print("the book not found")
+            else:
+                print("the book is already borrowed")
         else:
             connection.commit()
-            print("borrowed")
-        
-  
+            print("the book was successfully borrowed.")
 
-    
+    def Return(self, title, author):
+        query = """
+            UPDATE books
+            SET status = ?
+            WHERE title = ? AND author = ? AND status = ?
+        """
+        parameters = (True, title, author, False)
+        cursor.execute(query, parameters)
+
+        if cursor.rowcount == 0:
+            cursor.execute(
+                "SELECT status FROM books WHERE title = ? AND author = ?",
+                (title, author)
+            )
+            book = cursor.fetchone()
+
+            if book is None:
+                print("the book not found")
+            else:
+                print("the book is already returned")
+        else:
+            connection.commit()
+            print("the book was successfully returned")
+
+
 cursor.close()
 connection.close()       
